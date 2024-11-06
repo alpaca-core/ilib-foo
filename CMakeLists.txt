@@ -28,6 +28,12 @@ include(icm_dev_mode)
 include(icm_add_lib)
 
 #################
+# other config
+if(ICM_DEV_MODE)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) # modules to bin
+endif()
+
+#################
 # options
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
