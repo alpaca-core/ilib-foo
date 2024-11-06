@@ -35,7 +35,7 @@ endif()
 
 #################
 # options
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 option(AC_FOO_BUILD_TESTS "${CMAKE_PROJECT_NAME}: build tests" ${ICM_DEV_MODE})
 option(AC_FOO_BUILD_EXAMPLES "${CMAKE_PROJECT_NAME}: build examples" ${ICM_DEV_MODE})
@@ -59,11 +59,11 @@ include(../ac-local/out/build/debug/ac-local-targets.cmake)
 if(WIN32)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-local-d.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-local-d.dll
+            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-local.dll
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-local.dll
         COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-jalog-d.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-jalog-d.dll
+            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-jalog.dll
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-jalog.dll
         COMMAND_ERROR_IS_FATAL ANY
     )
 endif()
