@@ -7,5 +7,6 @@ target_link_libraries(${tgt} PRIVATE
     ac::local
     ac::jalog
     ac-test-data::foo
+    ac-dev::foo-plugin-dir
 )
 set_target_properties(${tgt} PROPERTIES FOLDER example)
