@@ -5,7 +5,7 @@ icm_add_lib(ac-foo AC_FOO)
 add_library(ac::foo ALIAS ac-foo)
 target_link_libraries(ac-foo
     PRIVATE
-        jalog::jalog
+        ac::jalog
     PUBLIC
         splat::splat
         itlib::itlib

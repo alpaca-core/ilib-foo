@@ -5,8 +5,8 @@
 #include <ac/foo/Instance.hpp>
 
 // logging
-#include <jalog/Instance.hpp>
-#include <jalog/sinks/DefaultSink.hpp>
+#include <ac/jalog/Instance.hpp>
+#include <ac/jalog/sinks/DefaultSink.hpp>
 
 // models
 #include "ac-test-data-foo-models.h"
@@ -14,8 +14,8 @@
 #include <iostream>
 
 int main() try {
-    jalog::Instance jl;
-    jl.setup().add<jalog::sinks::DefaultSink>();
+    ac::jalog::Instance jl;
+    jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
     ac::foo::Model model(AC_FOO_MODEL_SMALL, {});
     ac::foo::Instance instance(model, {});

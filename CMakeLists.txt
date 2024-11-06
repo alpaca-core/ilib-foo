@@ -54,7 +54,19 @@ endif()
 # packages
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
-CPMAddPackage(gh:iboB/jalog@0.4.5)
+
+include(../ac-local/out/build/debug/ac-local-targets.cmake)
+if(WIN32)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-local-d.dll
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-local-d.dll
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${CMAKE_CURRENT_SOURCE_DIR}/../ac-local/out/build/debug/bin/ac-jalog-d.dll
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ac-jalog-d.dll
+        COMMAND_ERROR_IS_FATAL ANY
+    )
+endif()
 
 #######################################
 # subdirs

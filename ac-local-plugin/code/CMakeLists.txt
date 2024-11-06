@@ -14,6 +14,5 @@ endif()
 target_link_libraries(aclp-foo PRIVATE
     ac::foo
     ac::local
-    jalog::jalog
     ac::jalog
 )

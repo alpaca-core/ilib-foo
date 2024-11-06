@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: MIT
 //
 #pragma once
-#include <jalog/Scope.hpp>
-#include <jalog/Log.hpp>
+#include <ac/jalog/Scope.hpp>
+#include <ac/jalog/Log.hpp>
 
 namespace ac::foo::log {
-extern jalog::Scope scope;
+extern ac::jalog::Scope scope;
 }
 
-#define FOO_LOG(lvl, ...) JALOG_SCOPE(::ac::foo::log::scope, lvl, __VA_ARGS__)
+#define FOO_LOG(lvl, ...) AC_JALOG_SCOPE(::ac::foo::log::scope, lvl, __VA_ARGS__)
