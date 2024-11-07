@@ -44,6 +44,10 @@ if(BUILD_SHARED_LIBS AND AC_FOO_BUILD_PLUGIN)
     )
 endif()
 
+if(NOT BUILD_SHARED_LIBS)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 #######################################
 # packages
 CPMAddPackage(gh:iboB/splat@1.3.3)
