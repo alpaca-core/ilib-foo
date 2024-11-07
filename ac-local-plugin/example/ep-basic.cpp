@@ -27,7 +27,8 @@ int main() try {
         .inferenceType = "foo",
         .assets = {
             {.path = AC_FOO_MODEL_LARGE, .tag = "x"}
-        }
+        },
+        .name = "foo-large"
     }, {});
 
     auto instance = model->createInstance("general", {});
