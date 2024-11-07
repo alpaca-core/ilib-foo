@@ -39,7 +39,7 @@ option(AC_FOO_BUILD_PLUGIN "${CMAKE_PROJECT_NAME}: build AC Local plugin" ${ICM_
 
 if(BUILD_SHARED_LIBS AND AC_FOO_BUILD_PLUGIN)
     message(AUTHOR_WARNING
-        "Building AC Local plugins with BUILD_SHARED_LIBS ON is dangerous! "
+        "${CMAKE_PROJECT_NAME}: Building AC Local plugins with BUILD_SHARED_LIBS ON is dangerous! "
         "https://github.com/alpaca-core/ac-local/blob/master/doc/dev/plugin%2Bshared-lib.md"
     )
 endif()

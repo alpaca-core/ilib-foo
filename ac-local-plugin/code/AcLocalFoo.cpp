@@ -18,6 +18,8 @@
 #include <itlib/throw_ex.hpp>
 #include <stdexcept>
 
+#include "version.h"
+
 namespace ac::local {
 
 namespace schema {
@@ -195,9 +197,13 @@ void addFooToFactory(ac::local::ModelFactory& factory) {
 
 extern "C" SYMBOL_EXPORT
 PluginInterface acLocalPluginLoad() {
+    constexpr Version ownVersion(
+        ACLP_FOO_VERSION_MAJOR, ACLP_FOO_VERSION_MINOR, ACLP_FOO_VERSION_PATCH, ACLP_FOO_VERSION_TAG
+    );
+
     return {
         .acLocalVersion = ac::local::Project_Version,
-        .pluginVersion = ac::local::Project_Version, // temp
+        .pluginVersion = ownVersion,
         .addLoadersToFactory = addFooToFactory,
     };
 }
