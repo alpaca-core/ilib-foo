@@ -1,20 +1,12 @@
 # Copyright (c) Alpaca Core
 # SPDX-License-Identifier: MIT
 #
-add_library(aclp-foo MODULE
+add_ac_local_plugin(aclp-foo
     AcLocalFoo.cpp
 )
-if(NOT WIN32)
-    target_compile_options(aclp-foo PRIVATE
-        -fvisibility=hidden
-        -fvisibility-inlines-hidden
-    )
-endif()
 
 target_link_libraries(aclp-foo PRIVATE
     ac::foo
-    ac::local
-    ac::jalog
 )
 
 configure_file(version.in.h version.h)
@@ -30,5 +22,5 @@ endif()
 install(TARGETS aclp-foo
     EXPORT ac-foo-plugins
     COMPONENT plugins
-    LIBRARY DESTINATION bin
+    LIBRARY DESTINATION plugins
 )
