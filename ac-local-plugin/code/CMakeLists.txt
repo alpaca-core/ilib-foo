@@ -20,7 +20,6 @@ if(AC_FOO_BUILD_TESTS OR AC_FOO_BUILD_EXAMPLES)
 endif()
 
 install(TARGETS aclp-foo
-    EXPORT ac-foo-plugins
     COMPONENT plugins
-    LIBRARY DESTINATION plugins
+    LIBRARY DESTINATION lib/ac-local
 )

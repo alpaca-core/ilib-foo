@@ -55,7 +55,7 @@ CPMAddPackage(gh:iboB/itlib@1.11.4)
 
 # allow ac::local to come from "above"
 if(NOT TARGET ac::local)
-    find_package(ac-local REQUIRED)
+    find_package(ac-local 432.23 REQUIRED)
 endif()
 
 #######################################
