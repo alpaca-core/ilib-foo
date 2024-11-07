@@ -23,3 +23,9 @@ if(AC_FOO_BUILD_TESTS OR AC_FOO_BUILD_EXAMPLES)
     add_library(ac-dev::foo-plugin-dir ALIAS ac-foo-plugin-dir)
     target_include_directories(ac-foo-plugin-dir INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
 endif()
+
+install(TARGETS aclp-foo
+    EXPORT ac-foo-plugins
+    COMPONENT plugins
+    LIBRARY DESTINATION bin
+)

@@ -53,7 +53,10 @@ endif()
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
 
-find_package(ac-local REQUIRED)
+# allow ac::local to come from "above"
+if(NOT TARGET ac::local)
+    find_package(ac-local REQUIRED)
+endif()
 
 #######################################
 # subdirs
@@ -78,3 +81,8 @@ endif()
 if(AC_FOO_BUILD_PLUGIN)
     add_subdirectory(ac-local-plugin)
 endif()
+
+file(GENERATE
+    OUTPUT foo-plugins.json
+    INPUT foo-plugins.in.json
+)
