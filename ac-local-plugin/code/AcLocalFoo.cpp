@@ -196,6 +196,8 @@ void addFooToFactory(ac::local::ModelFactory& factory) {
 extern "C" SYMBOL_EXPORT
 PluginInterface acLocalPluginLoad() {
     return {
+        .acLocalVersion = ac::local::Project_Version,
+        .pluginVersion = ac::local::Project_Version, // temp
         .addLoadersToFactory = addFooToFactory,
     };
 }

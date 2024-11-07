@@ -10,3 +10,4 @@ target_link_libraries(${tgt} PRIVATE
     ac-dev::foo-plugin-dir
 )
 set_target_properties(${tgt} PROPERTIES FOLDER example)
+add_dependencies(${tgt} aclp-foo)
