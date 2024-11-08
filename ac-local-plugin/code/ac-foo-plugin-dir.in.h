@@ -1,2 +1,0 @@
-#pragma once
-#define AC_FOO_PLUGIN_DIR "@CMAKE_CURRENT_BINARY_DIR@"

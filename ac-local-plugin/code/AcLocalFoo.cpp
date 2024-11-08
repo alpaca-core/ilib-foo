@@ -198,7 +198,7 @@ void addFooToFactory(ac::local::ModelFactory& factory) {
 extern "C" SYMBOL_EXPORT
 PluginInterface acLocalPluginLoad() {
     constexpr Version ownVersion(
-        ACLP_FOO_VERSION_MAJOR, ACLP_FOO_VERSION_MINOR, ACLP_FOO_VERSION_PATCH, ACLP_FOO_VERSION_TAG
+        ACLP_foo_VERSION_MAJOR, ACLP_foo_VERSION_MINOR, ACLP_foo_VERSION_PATCH, ACLP_foo_VERSION_TAG
     );
 
     return {

@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "ac-test-data-foo-models.h"
-#include "ac-foo-plugin-dir.h"
+#include "aclp-foo-dir.h"
 
 int main() try {
     ac::jalog::Instance jl;
@@ -20,7 +20,7 @@ int main() try {
 
     ac::local::ModelFactory factory;
 
-    auto pi = ac::local::PluginLoader::loadPlugin(AC_FOO_PLUGIN_DIR, "aclp-foo");
+    auto pi = ac::local::PluginLoader::loadPlugin(ACLP_foo_DIR, "aclp-foo");
     pi.addLoadersToFactory(factory);
 
     auto model = factory.createModel({
