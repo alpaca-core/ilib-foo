@@ -1,22 +1,17 @@
 {
-  "version": 3,
+  "version": 5,
+  "vendor": {
+    "comments": {
+      "intro": "This is the only place where comments are allowed before CMake 3.31 (preset version 10)"
+    }
+  },
   "configurePresets": [
     {
       "name": "base",
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
-      "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": true
-      }
-    },
-    {
-      "name": "ac-local-exported",
-      "hidden": true,
-      "cacheVariables": {
-        "ac-local_ROOT": "${sourceDir}/../ac-local/out/build/${presetName}"
-      }
+      "installDir": "${sourceDir}/out/install/${presetName}"
     },
     {
       "name": "base-debug",
@@ -30,16 +25,77 @@
       "inherits": "base",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo" }
     },
+
     {
-      "name": "shared",
-      "hidden": true,
-      "cacheVariables": { "BUILD_SHARED_LIBS": "ON" }
+      "name": "standalone",
+      "description": "Standalone build with no deps on other projects. Suitable for CI builds.",
+      "hidden": true
     },
+    {
+      "name": "monorepo-like",
+      "description": "Deps on other projects are resolved by paths relative to this one. Suitable for local development.",
+      "hidden": true,
+      "cacheVariables": {
+        "AC_STANDALONE": false,
+        "AC_MONO_ROOT": true
+      }
+    },
+    {
+      "name": "deploy",
+      "description": "Deps are resolved by find_package and must be installed in the system.",
+      "hidden": true,
+      "cacheVariables": {
+        "AC_STANDALONE": false,
+        "AC_DEPLOY_ROOT": true
+      }
+    },
+
+    {
+      "name": "debug",
+      "inherits": ["base-debug", "monorepo-like"]
+    },
+    {
+      "name": "release",
+      "inherits": ["base-release", "monorepo-like"]
+    },
+
     {
       "name": "gcc",
       "hidden": true,
-      "cacheVariables": { "CMAKE_C_COMPILER": "gcc", "CMAKE_CXX_COMPILER": "g++" }
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
     },
+    {
+      "name": "clang",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-clang-x64"
+        }
+      }
+    },
+
+    {
+      "name": "android",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Android",
+        "CMAKE_SYSTEM_VERSION": "24",
+        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a",
+        "CMAKE_ANDROID_NDK": {
+          "value": "$env{ANDROID_NDK_ROOT}",
+          "type": "PATH"
+        },
+        "CMAKE_ANDROID_STL_TYPE": "c++_static"
+      }
+    },
+
     {
       "name": "asan",
       "hidden": true,
@@ -59,24 +115,6 @@
       "name": "tsan",
       "hidden": true,
       "cacheVariables": { "SAN_THREAD": true }
-    },
-
-    {
-      "name": "debug",
-      "inherits": ["base-debug", "ac-local-exported"]
-    },
-    {
-      "name": "release",
-      "inherits": ["base-release", "ac-local-exported"]
-    },
-
-    {
-      "name": "debug-gcc",
-      "inherits": ["debug", "gcc"]
-    },
-    {
-      "name": "release-gcc",
-      "inherits": ["release", "gcc"]
     },
 
     {
