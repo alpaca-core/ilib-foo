@@ -9,20 +9,13 @@ project(ilib-foo
     LANGUAGES CXX
 )
 
-#################
-# cpm
-if(NOT CPM_SOURCE_CACHE AND NOT DEFINED ENV{CPM_SOURCE_CACHE})
-    set(CPM_SOURCE_CACHE "${CMAKE_CURRENT_SOURCE_DIR}/.cpm")
-    message(STATUS "Setting cpm cache dir to: ${CPM_SOURCE_CACHE}")
-endif()
-include(./get_cpm.cmake)
+include(./get-ac-local-cmake-lib.cmake)
 
 #################
 # cmake lib
 CPMAddPackage(gh:iboB/icm@1.5.4)
 list(APPEND CMAKE_MODULE_PATH
     "${icm_SOURCE_DIR}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../ac-local-cmake-lib"
 )
 
 include(icm_add_lib)
