@@ -9,7 +9,9 @@ project(ilib-foo
     LANGUAGES CXX
 )
 
-include(./get-ac-local-cmake-lib.cmake)
+set(PROJECT_VERSION_TAG dev)
+
+include(./get-ac-build.cmake)
 
 #################
 # cmake lib
@@ -20,10 +22,10 @@ list(APPEND CMAKE_MODULE_PATH
 
 include(icm_add_lib)
 
-include(init_ac_local_prj)
+include(init_ac_prj)
 
-include(ac_local_dep_util)
-include(ac_local_plugin_util)
+include(ac_build_prj_util)
+include(ac_build_plugin_util)
 
 #################
 # options
@@ -32,7 +34,7 @@ option(AC_FOO_BUILD_TESTS "${CMAKE_PROJECT_NAME}: build tests" ${testsDefault})
 option(AC_FOO_BUILD_EXAMPLES "${CMAKE_PROJECT_NAME}: build examples" ${examplesDefault})
 mark_as_advanced(AC_FOO_BUILD_TESTS AC_FOO_BUILD_EXAMPLES)
 
-init_ac_local_plugin_option(FOO)
+init_ac_plugin_option(FOO)
 
 #######################################
 # packages
@@ -40,7 +42,6 @@ init_ac_local_plugin_option(FOO)
 add_ac_local(0.1.1)
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
-
 
 #######################################
 # subdirs
