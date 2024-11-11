@@ -5,12 +5,16 @@ tmp/
 out/
 build/
 
-# configure/codegen artefacts
+# configure artefacts
 gen/
 
+# optional cpm source cache (if not otherwise set)
+.cpm/
+
 # ides and editors
-.vscode/
 .vs/
+.vscode/
 /CMakeSettings.json
 /CMakeUserPresets.json
 .~*
+.aider*
