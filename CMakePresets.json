@@ -39,7 +39,6 @@
       "description": "Deps on other projects are resolved by paths relative to this one. Suitable for local development.",
       "hidden": true,
       "cacheVariables": {
-        "AC_STANDALONE": false,
         "AC_MONO_ROOT": true
       }
     },
@@ -47,7 +46,6 @@
       "name": "mono-comp",
       "hidden": true,
       "cacheVariables": {
-        "AC_STANDALONE": false,
         "AC_MONO_COMP": true
       }
     },
@@ -56,7 +54,6 @@
       "description": "Deps are resolved by find_package and must be installed in the system.",
       "hidden": true,
       "cacheVariables": {
-        "AC_STANDALONE": false,
         "AC_DEPLOY_ROOT": true
       }
     },
@@ -64,7 +61,6 @@
       "name": "deploy-comp",
       "hidden": true,
       "cacheVariables": {
-        "AC_STANDALONE": false,
         "AC_DEPLOY_COMP": true
       }
     },

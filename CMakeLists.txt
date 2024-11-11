@@ -25,8 +25,6 @@ include(init_ac_local_prj)
 include(ac_local_dep_util)
 include(ac_local_plugin_util)
 
-add_ac_local(0.1.0)
-
 #################
 # options
 
@@ -39,6 +37,7 @@ init_ac_local_plugin_option(FOO)
 #######################################
 # packages
 
+add_ac_local(0.1.1)
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
 

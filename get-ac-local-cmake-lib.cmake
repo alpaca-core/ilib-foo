@@ -4,14 +4,14 @@
 
 # cpm
 if(NOT CPM_SOURCE_CACHE AND NOT DEFINED ENV{CPM_SOURCE_CACHE})
-    set(CPM_SOURCE_CACHE "${CMAKE_CURRENT_SOURCE_DIR}/.cpm")
+    set(CPM_SOURCE_CACHE "${CMAKE_SOURCE_DIR}/.cpm")
     message(STATUS "Setting cpm cache dir to: ${CPM_SOURCE_CACHE}")
 endif()
 include(./get_cpm.cmake)
 
 # ac-local-cmake-lib
 if(AC_MONO_ROOT OR AC_MONO_COMP)
-    set(acLocalCMakeLibDir "${PROJECT_SOURCE_DIR}/../ac-local-cmake-lib")
+    set(acLocalCMakeLibDir "${CMAKE_SOURCE_DIR}/../ac-local-cmake-lib")
 else()
     CPMAddPackage(gh:alpaca-core/ac-local-cmake-lib@0.1.0)
     set(acLocalCMakeLibDir "${ac-local-cmake-lib_SOURCE_DIR}")
