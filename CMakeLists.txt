@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
 project(ilib-foo
     VERSION 1.0.0
-    DESCRIPTION "Example plugin for the Alpaca Core SDK"
+    DESCRIPTION "Example plugin for the Alpaca Core Local SDK"
     LANGUAGES CXX
 )
 
@@ -30,8 +30,8 @@ include(ac_build_plugin_util)
 #################
 # options
 
-option(AC_FOO_BUILD_TESTS "${CMAKE_PROJECT_NAME}: build tests" ${testsDefault})
-option(AC_FOO_BUILD_EXAMPLES "${CMAKE_PROJECT_NAME}: build examples" ${examplesDefault})
+option(AC_FOO_BUILD_TESTS "${PROJECT_NAME}: build tests" ${testsDefault})
+option(AC_FOO_BUILD_EXAMPLES "${PROJECT_NAME}: build examples" ${examplesDefault})
 mark_as_advanced(AC_FOO_BUILD_TESTS AC_FOO_BUILD_EXAMPLES)
 
 init_ac_plugin_option(FOO)
