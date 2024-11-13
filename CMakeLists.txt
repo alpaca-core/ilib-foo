@@ -43,9 +43,6 @@ add_ac_local(0.1.1)
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
 
-### ac_local lib
-include(ac_local_plugin_util)
-
 #######################################
 # subdirs
 add_subdirectory(code)
