@@ -1,3 +1,0 @@
-{
-    "foo": "$<TARGET_FILE:aclp-foo>"
-}

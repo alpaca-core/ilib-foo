@@ -18,7 +18,7 @@
 #include <itlib/throw_ex.hpp>
 #include <stdexcept>
 
-#include "version.h"
+#include "foo-ac-local-interface.hpp"
 
 namespace ac::local {
 
@@ -188,26 +188,11 @@ public:
     }
 };
 
-// plugin interface
+} // namespace ac::local
 
-void addFooToFactory(ac::local::ModelFactory& factory) {
+namespace ac::foo {
+void addToAcLocal(ac::local::ModelFactory& factory) {
     static ac::local::FooModelLoader loader;
     factory.addLoader("foo", loader);
 }
-
-extern "C" SYMBOL_EXPORT
-PluginInterface acLocalPluginLoad() {
-    constexpr Version ownVersion(
-        ACLP_foo_VERSION_MAJOR, ACLP_foo_VERSION_MINOR, ACLP_foo_VERSION_PATCH, ACLP_foo_VERSION_TAG
-    );
-
-    return {
-        .acLocalVersion = ac::local::Project_Version,
-        .pluginVersion = ownVersion,
-        .addLoadersToFactory = addFooToFactory,
-    };
 }
-static_assert(std::is_same_v<decltype(&acLocalPluginLoad), PluginInterface::PluginLoadFunc>);
-
-} // namespace ac::local
-

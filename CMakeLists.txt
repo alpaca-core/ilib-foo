@@ -66,8 +66,3 @@ endif()
 if(BUILD_AC_FOO_PLUGIN)
     add_subdirectory(ac-local-plugin)
 endif()
-
-file(GENERATE
-    OUTPUT foo-plugins.json
-    INPUT foo-plugins.in.json
-)
