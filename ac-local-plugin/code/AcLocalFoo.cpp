@@ -18,7 +18,7 @@
 #include <itlib/throw_ex.hpp>
 #include <stdexcept>
 
-#include "foo-ac-local-interface.hpp"
+#include "aclp-foo-interface.hpp"
 
 namespace ac::local {
 
