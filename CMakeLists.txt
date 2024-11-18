@@ -46,7 +46,7 @@ CPMAddPackage(gh:iboB/itlib@1.11.4)
 add_subdirectory(code)
 
 if(AC_FOO_BUILD_TESTS OR AC_FOO_BUILD_EXAMPLES)
-    add_subdirectory(test-models)
+    CPMAddPackage(gh:alpaca-core/test-data-foo@1.0.0)
 endif()
 
 if(AC_FOO_BUILD_TESTS)
