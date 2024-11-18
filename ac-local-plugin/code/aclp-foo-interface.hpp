@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MIT
 //
 #pragma once
+#include <ac/local/PluginInterface.hpp>
 
-namespace ac::local { class ModelFactory; }
 namespace ac::foo {
-void addToAcLocal(ac::local::ModelFactory& factory);
+local::PluginInterface getPluginInterface();
 }

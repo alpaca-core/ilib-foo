@@ -1,10 +1,10 @@
 // Copyright (c) Alpaca Core
 // SPDX-License-Identifier: MIT
 //
-#include <ac/local/PluginLoader.hpp>
-#include <ac/local/ModelFactory.hpp>
 #include <ac/local/Model.hpp>
 #include <ac/local/Instance.hpp>
+#include <ac/local/ModelLoaderRegistry.hpp>
+#include <ac/local/Lib.hpp>
 
 #include <ac/jalog/Instance.hpp>
 #include <ac/jalog/sinks/DefaultSink.hpp>
@@ -12,18 +12,15 @@
 #include <iostream>
 
 #include "ac-test-data-foo-models.h"
-#include "aclp-foo-plugin-info.h"
+#include "aclp-foo-info.h"
 
 int main() try {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
-    ac::local::ModelFactory factory;
+    ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
-    auto pi = ac::local::PluginLoader::loadPlugin(ACLP_foo_PLUGIN_FILE);
-    pi.addLoadersToFactory(factory);
-
-    auto model = factory.createModel({
+    auto model = ac::local::Lib::modelLoaderRegistry().createModel({
         .inferenceType = "foo",
         .assets = {
             {.path = AC_FOO_MODEL_LARGE, .tag = "x"}

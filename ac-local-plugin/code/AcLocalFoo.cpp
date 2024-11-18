@@ -11,13 +11,13 @@
 #include <ac/local/Instance.hpp>
 #include <ac/local/Model.hpp>
 #include <ac/local/ModelLoader.hpp>
-#include <ac/local/ModelFactory.hpp>
 
 #include <astl/move.hpp>
 #include <astl/workarounds.h>
 #include <itlib/throw_ex.hpp>
 #include <stdexcept>
 
+#include "aclp-foo-version.h"
 #include "aclp-foo-interface.hpp"
 
 namespace ac::local {
@@ -164,6 +164,15 @@ public:
 
 class FooModelLoader final : public ModelLoader {
 public:
+    virtual const Info& info() const noexcept override {
+        static Info i = {
+            .name = "ac foo",
+            .vendor = "Alpaca Core",
+            .inferenceSchemaTypes = {"foo"},
+        };
+        return i;
+    }
+
     virtual ModelPtr loadModel(ModelDesc desc, Dict params, ProgressCb pcb) override {
         if (desc.assets.size() > 1) throw_ex{} << "foo: expected one or zero assets";
 
@@ -191,8 +200,24 @@ public:
 } // namespace ac::local
 
 namespace ac::foo {
-void addToAcLocal(ac::local::ModelFactory& factory) {
-    static ac::local::FooModelLoader loader;
-    factory.addLoader("foo", loader);
+
+std::vector<ac::local::ModelLoaderPtr> getLoaders() {
+    std::vector<ac::local::ModelLoaderPtr> ret;
+    ret.push_back(std::make_unique<local::FooModelLoader>());
+    return ret;
 }
+
+local::PluginInterface getPluginInterface() {
+    return {
+        .label = "ac foo",
+        .desc = "Foo plugin for ac-local",
+        .vendor = "Alpaca Core",
+        .version = astl::version{
+            ACLP_foo_VERSION_MAJOR, ACLP_foo_VERSION_MINOR, ACLP_foo_VERSION_PATCH
+        },
+        .init = nullptr,
+        .getLoaders = getLoaders,
+    };
 }
+
+} // namespace ac::foo
