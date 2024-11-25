@@ -54,7 +54,7 @@
     },
     {
       "name": "release",
-      "inherits": [ "base-release", "mono" ]
+      "inherits": ["base-release", "mono"]
     },
 
     {
@@ -62,6 +62,13 @@
       "inherits": ["base-debug", "mono", "component"],
       "cacheVariables": {
         "ac-local_ROOT": "${sourceDir}/../ac-local/out/build/debug"
+      }
+    },
+    {
+      "name": "release-mono-comp",
+      "inherits": ["base-release", "mono", "component"],
+      "cacheVariables": {
+        "ac-local_ROOT": "${sourceDir}/../ac-local/out/build/release"
       }
     },
 
@@ -143,6 +150,15 @@
       "name": "debug-aublsan",
       "description": "combining addr, ub and leak sanitizers is widely supported on many platforms",
       "inherits": ["debug", "asan", "ubsan", "lsan"]
+    },
+
+    {
+      "name": "debug-ci",
+      "inherits": ["base-debug", "standalone", "asan", "ubsan", "lsan"]
+    },
+    {
+      "name": "release-ci",
+      "inherits": ["base-release", "standalone", "asan", "ubsan", "lsan"]
     }
   ]
 }
