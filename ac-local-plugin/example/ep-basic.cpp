@@ -3,7 +3,7 @@
 //
 #include <ac/local/Model.hpp>
 #include <ac/local/Instance.hpp>
-#include <ac/local/ModelLoaderRegistry.hpp>
+#include <ac/local/ModelAssetDesc.hpp>
 #include <ac/local/Lib.hpp>
 
 #include <ac/jalog/Instance.hpp>
@@ -20,8 +20,8 @@ int main() try {
 
     ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
-    auto model = ac::local::Lib::modelLoaderRegistry().createModel({
-        .inferenceType = "foo",
+    auto model = ac::local::Lib::loadModel({
+        .type = "foo",
         .assets = {
             {.path = AC_FOO_MODEL_LARGE, .tag = "x"}
         },

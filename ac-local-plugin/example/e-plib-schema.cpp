@@ -3,8 +3,8 @@
 //
 #include <ac/local/Model.hpp>
 #include <ac/local/Instance.hpp>
+#include <ac/local/ModelAssetDesc.hpp>
 #include <ac/local/Lib.hpp>
-#include <ac/local/ModelLoaderRegistry.hpp>
 
 #include <ac/schema/Helpers.hpp>
 
@@ -23,8 +23,8 @@ int main() try {
 
     add_foo_to_ac_local_global_registry();
 
-    auto model = ac::local::Lib::modelLoaderRegistry().createModel({
-        .inferenceType = "foo",
+    auto model = ac::local::Lib::loadModel({
+        .type = "foo",
         .assets = {
             {.path = AC_FOO_MODEL_LARGE, .tag = "x"}
         },

@@ -108,16 +108,15 @@ public:
         static Info i = {
             .name = "ac foo",
             .vendor = "Alpaca Core",
-            .inferenceSchemaTypes = {"foo"},
         };
         return i;
     }
 
-    virtual bool canLoadModel(const ModelDesc&, const Dict&) const noexcept override {
-        return true;
+    virtual bool canLoadModel(const ModelAssetDesc& desc, const Dict&) const noexcept override {
+        return desc.type == "foo";
     }
 
-    virtual ModelPtr loadModel(ModelDesc desc, Dict params, ProgressCb pcb) override {
+    virtual ModelPtr loadModel(ModelAssetDesc desc, Dict params, ProgressCb pcb) override {
         if (desc.assets.size() > 1) throw_ex{} << "foo: expected one or zero assets";
 
         if (desc.assets.empty()) {
