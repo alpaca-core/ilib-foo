@@ -1,6 +1,7 @@
 # Copyright (c) Alpaca Core
 # SPDX-License-Identifier: MIT
 #
+add_subdirectory(schema)
 add_subdirectory(code)
 
 if(AC_FOO_BUILD_EXAMPLES)

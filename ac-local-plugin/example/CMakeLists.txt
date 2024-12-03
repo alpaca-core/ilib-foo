@@ -19,5 +19,6 @@ target_link_libraries(${tgt} PRIVATE
     ac::jalog
     ac-test-data::foo
     aclp::foo-plib
+    ac::foo-schema
 )
 set_target_properties(${tgt} PROPERTIES FOLDER example)

@@ -6,14 +6,14 @@
 #include <ac/local/ModelAssetDesc.hpp>
 #include <ac/local/Lib.hpp>
 
-#include <ac/schema/Helpers.hpp>
+#include <ac/schema/CallHelpers.hpp>
+#include <ac/schema/Foo.hpp>
 
 #include <ac/jalog/Instance.hpp>
 #include <ac/jalog/sinks/DefaultSink.hpp>
 
 #include <iostream>
 
-#include "foo-schema.hpp"
 #include "aclp-foo-plib.h"
 #include "ac-test-data-foo-models.h"
 
@@ -31,15 +31,16 @@ int main() try {
         .name = "foo-large"
     }, {});
 
-    using Instance = ac::local::schema::Foo::InstanceGeneral;
+    using Instance = ac::local::schema::FooLoader::InstanceGeneral;
     auto instance = Model_createInstance<Instance>(*model, {});
 
-    auto opResult = Instance_runOp<Instance::OpRun>(*instance, {
-        .input = {"JFK", "said:"},
+    using Interface = ac::local::schema::FooInterface;
+    auto opResult = Instance_runOp<Interface::OpRun>(*instance, {
+        .input = std::vector<std::string>{"JFK", "said:"},
         .splice = false
     });
 
-    std::cout << opResult.result << "\n";
+    std::cout << opResult.result.value() << "\n";
 
     return 0;
 }

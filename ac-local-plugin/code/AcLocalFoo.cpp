@@ -10,12 +10,15 @@
 #include <ac/local/Model.hpp>
 #include <ac/local/ModelLoader.hpp>
 
+#include <ac/schema/DispatchHelpers.hpp>
+
+#include <ac/schema/Foo.hpp>
+
 #include <astl/move.hpp>
 #include <astl/workarounds.h>
 #include <itlib/throw_ex.hpp>
 #include <stdexcept>
 
-#include "foo-schema.hpp"
 #include "aclp-foo-version.h"
 #include "aclp-foo-interface.hpp"
 
@@ -26,63 +29,63 @@ using throw_ex = itlib::throw_ex<std::runtime_error>;
 class FooInstance final : public Instance {
     std::shared_ptr<foo::Model> m_model;
     foo::Instance m_instance;
+    schema::OpDispatcherData m_dispatcherData;
 public:
-    using Schema = ac::local::schema::Foo::InstanceGeneral;
+    using Schema = schema::FooLoader::InstanceGeneral;
 
-    static foo::Instance::InitParams InitParams_fromDict(Dict& d) {
-        auto schemaParams = Schema::Params::fromDict(d);
+    static foo::Instance::InitParams InitParams_fromDict(Dict&& d) {
+        auto schemaParams = schema::Struct_fromDict<Schema::Params>(astl::move(d));
         foo::Instance::InitParams ret;
         ret.cutoff = schemaParams.cutoff;
         return ret;
     }
 
-    FooInstance(std::shared_ptr<foo::Model> model, Dict& params)
+    FooInstance(std::shared_ptr<foo::Model> model, Dict&& params)
         : m_model(astl::move(model))
-        , m_instance(*m_model, InitParams_fromDict(params))
-    {}
+        , m_instance(*m_model, InitParams_fromDict(astl::move(params)))
+    {
+        schema::registerHandlers<schema::FooInterface::Ops>(m_dispatcherData, *this);
+    }
 
-    Dict run(Dict& params) {
-        const auto schemaParams = Schema::OpRun::Params::fromDict(params);
-
+    schema::FooInterface::OpRun::Return on(schema::FooInterface::OpRun, schema::FooInterface::OpRun::Params params) {
         foo::Instance::SessionParams sparams;
-        sparams.splice = schemaParams.splice;
-        sparams.throwOn = schemaParams.throwOn;
+        sparams.splice = params.splice;
+        sparams.throwOn = params.throwOn;
 
-        auto s = m_instance.newSession(std::move(schemaParams.input), sparams);
+        auto s = m_instance.newSession(std::move(params.input), sparams);
 
-        Schema::OpRun::Return ret;
+        schema::FooInterface::OpRun::Return ret;
+        auto& res = ret.result.materialize();
         for (auto& w : s) {
-            ret.result += w;
-            ret.result += ' ';
+            res += w;
+            res += ' ';
         }
-        if (!ret.result.empty()) {
+        if (!res.empty()) {
             // remove last space
-            ret.result.pop_back();
+            res.pop_back();
         }
 
-        return ret.toDict();
+        return ret;
     }
 
     virtual Dict runOp(std::string_view op, Dict params, ProgressCb) override {
-        switch (Schema::getOpIndexById(op)) {
-        case Schema::opIndex<Schema::OpRun>:
-            return run(params);
-        default:
+        auto ret = m_dispatcherData.dispatch(op, astl::move(params));
+        if (!ret) {
             throw_ex{} << "foo: unknown op: " << op;
-            MSVC_WO_10766806();
         }
+        return *ret;
     }
 };
 
 class FooModel final : public Model {
     std::shared_ptr<foo::Model> m_model;
 public:
-    using Schema = ac::local::schema::Foo;
+    using Schema = schema::FooLoader;
 
     static foo::Model::Params ModelParams_fromDict(Dict& d) {
-        auto schemaParams = Schema::Params::fromDict(d);
+        auto schemaParams = schema::Struct_fromDict<Schema::Params>(std::move(d));
         foo::Model::Params ret;
-        ret.splice = astl::move(schemaParams.spliceString.value_or(""));
+        ret.splice = astl::move(schemaParams.spliceString.valueOr(""));
         return ret;
     }
 
@@ -92,10 +95,10 @@ public:
     explicit FooModel(Dict& params) : m_model(std::make_shared<foo::Model>(ModelParams_fromDict(params))) {}
 
     virtual std::unique_ptr<Instance> createInstance(std::string_view type, Dict params) override {
-        switch (Schema::getInstanceById(type)) {
-        case Schema::instanceIndex<Schema::InstanceGeneral>:
-            return std::make_unique<FooInstance>(m_model, params);
-        default:
+        if (type == "general") {
+            return std::make_unique<FooInstance>(m_model, astl::move(params));
+        }
+        else {
             throw_ex{} << "foo: unknown instance type: " << type;
             MSVC_WO_10766806();
         }
@@ -106,7 +109,7 @@ class FooModelLoader final : public ModelLoader {
 public:
     virtual const Info& info() const noexcept override {
         static Info i = {
-            .name = "ac foo",
+            .name = "ac-local foo",
             .vendor = "Alpaca Core",
         };
         return i;
