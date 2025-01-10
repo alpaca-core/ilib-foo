@@ -15,9 +15,13 @@ target_sources(ac-foo
         ac/foo/api.h
         ac/foo/Model.hpp
         ac/foo/Instance.hpp
+        ac/foo/EmbeddingInstance.hpp
+        ac/foo/VectorStore.hpp
     PRIVATE
         ac/foo/Logging.hpp
         ac/foo/Logging.cpp
         ac/foo/Model.cpp
         ac/foo/Instance.cpp
+        ac/foo/EmbeddingInstance.cpp
+        ac/foo/VectorStore.cpp
 )
