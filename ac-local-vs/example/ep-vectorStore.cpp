@@ -58,7 +58,6 @@ int main() try {
         std::cout << "id: " << id << ", score: " << score << " text: "<< ac::Dict_optValueAt(str, "text", std::string()) << "\n";
     }
 
-
     return 0;
 }
 catch (std::exception& e) {

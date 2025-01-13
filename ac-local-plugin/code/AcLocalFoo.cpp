@@ -34,9 +34,18 @@ class FooEmbeddingInstance final : public Instance {
     foo::EmbeddingInstance m_instance;
     schema::OpDispatcherData m_dispatcherData;
 public:
-    FooEmbeddingInstance(std::shared_ptr<foo::Model> model, Dict&&)
+    using Schema = schema::FooLoader::InstanceEmbedding;
+
+    static foo::EmbeddingInstance::InitParams InitParams_fromDict(Dict&& d) {
+        auto schemaParams = schema::Struct_fromDict<Schema::Params>(astl::move(d));
+        foo::EmbeddingInstance::InitParams ret;
+        ret.vectorSize = schemaParams.vectorSize;
+        return ret;
+    }
+
+    FooEmbeddingInstance(std::shared_ptr<foo::Model> model, Dict&& params)
         : m_model(astl::move(model))
-        , m_instance(*m_model, {})
+        , m_instance(*m_model, InitParams_fromDict(astl::move(params)))
     {
         schema::registerHandlers<schema::FooEmbeddingInterface::Ops>(m_dispatcherData, *this);
     }

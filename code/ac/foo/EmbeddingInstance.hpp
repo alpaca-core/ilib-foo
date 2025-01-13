@@ -12,7 +12,7 @@ class Model;
 class AC_FOO_API EmbeddingInstance {
 public:
     struct InitParams {
-        int cutoff = -1; // cut off model data to n-th element (or don't cut if -1)
+        int vectorSize = 64; // The size of the embedding vector
     };
 
     EmbeddingInstance(Model& model, InitParams params);

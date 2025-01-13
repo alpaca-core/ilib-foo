@@ -12,12 +12,11 @@ EmbeddingInstance::EmbeddingInstance(Model& model, InitParams params)
 {}
 
 std::vector<float> EmbeddingInstance::getEmbedding(std::string_view input) {
-    const uint32_t vectorSize = 64;
     std::vector<float> ret;
-    ret.resize(vectorSize);
+    ret.resize(m_params.vectorSize);
 
     for (int32_t i = 0; i < input.size(); ++i) {
-        ret[i % vectorSize] = static_cast<float>(i);
+        ret[i % m_params.vectorSize] = static_cast<float>(i);
     }
 
     return ret;
