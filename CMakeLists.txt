@@ -63,4 +63,5 @@ endif()
 
 if(BUILD_AC_FOO_PLUGIN)
     add_subdirectory(ac-local-plugin)
+    add_subdirectory(ac-local-vs)
 endif()

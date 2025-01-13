@@ -3,12 +3,15 @@
 //
 #include <ac/foo/Model.hpp>
 #include <ac/foo/Instance.hpp>
+#include <ac/foo/EmbeddingInstance.hpp>
+#include <ac/foo/VectorStore.hpp>
 
 #include <ac/local/PluginInterface.hpp>
 
 #include <ac/local/Instance.hpp>
 #include <ac/local/Model.hpp>
 #include <ac/local/ModelLoader.hpp>
+#include <ac/local/VectorStore.hpp>
 
 #include <ac/schema/DispatchHelpers.hpp>
 
@@ -25,6 +28,33 @@
 namespace ac::local {
 
 using throw_ex = itlib::throw_ex<std::runtime_error>;
+
+class FooEmbeddingInstance final : public Instance {
+    std::shared_ptr<foo::Model> m_model;
+    foo::EmbeddingInstance m_instance;
+    schema::OpDispatcherData m_dispatcherData;
+public:
+    FooEmbeddingInstance(std::shared_ptr<foo::Model> model, Dict&&)
+        : m_model(astl::move(model))
+        , m_instance(*m_model, {})
+    {
+        schema::registerHandlers<schema::FooEmbeddingInterface::Ops>(m_dispatcherData, *this);
+    }
+
+    schema::FooEmbeddingInterface::OpRun::Return on(schema::FooEmbeddingInterface::OpRun, schema::FooEmbeddingInterface::OpRun::Params params) {
+        return {
+            .result = m_instance.getEmbedding(params.input.value())
+        };
+    }
+
+    virtual Dict runOp(std::string_view op, Dict params, ProgressCb) override {
+        auto ret = m_dispatcherData.dispatch(op, astl::move(params));
+        if (!ret) {
+            throw_ex{} << "foo: unknown op: " << op;
+        }
+        return *ret;
+    }
+};
 
 class FooInstance final : public Instance {
     std::shared_ptr<foo::Model> m_model;
@@ -97,6 +127,8 @@ public:
     virtual std::unique_ptr<Instance> createInstance(std::string_view type, Dict params) override {
         if (type == "general") {
             return std::make_unique<FooInstance>(m_model, astl::move(params));
+        } else if (type == "embedding") {
+            return std::make_unique<FooEmbeddingInstance>(m_model, astl::move(params));
         }
         else {
             throw_ex{} << "foo: unknown instance type: " << type;
