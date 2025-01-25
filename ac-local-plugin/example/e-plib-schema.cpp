@@ -31,7 +31,7 @@ int main() try {
         .name = "foo-large"
     }, {});
 
-    using Instance = ac::local::schema::FooLoader::InstanceGeneral;
+    using Instance = ac::local::schema::FooProvider::InstanceGeneral;
     auto instance = Model_createInstance<Instance>(*model, {});
 
     using Interface = ac::local::schema::FooInterface;

@@ -42,7 +42,7 @@ struct FooInterface {
     using Ops = std::tuple<OpRun>;
 };
 
-struct FooLoader {
+struct FooProvider {
     static inline constexpr std::string_view id = "foo";
     static inline constexpr std::string_view description = "Foo inference for tests, examples, and experiments.";
 

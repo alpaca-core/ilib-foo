@@ -8,7 +8,7 @@
 
 #include <ac/local/Instance.hpp>
 #include <ac/local/Model.hpp>
-#include <ac/local/ModelLoader.hpp>
+#include <ac/local/Provider.hpp>
 
 #include <ac/schema/DispatchHelpers.hpp>
 
@@ -31,7 +31,7 @@ class FooInstance final : public Instance {
     foo::Instance m_instance;
     schema::OpDispatcherData m_dispatcherData;
 public:
-    using Schema = schema::FooLoader::InstanceGeneral;
+    using Schema = schema::FooProvider::InstanceGeneral;
 
     static foo::Instance::InitParams InitParams_fromDict(Dict&& d) {
         auto schemaParams = schema::Struct_fromDict<Schema::Params>(astl::move(d));
@@ -80,7 +80,7 @@ public:
 class FooModel final : public Model {
     std::shared_ptr<foo::Model> m_model;
 public:
-    using Schema = schema::FooLoader;
+    using Schema = schema::FooProvider;
 
     static foo::Model::Params ModelParams_fromDict(Dict& d) {
         auto schemaParams = schema::Struct_fromDict<Schema::Params>(std::move(d));
@@ -105,7 +105,7 @@ public:
     }
 };
 
-class FooModelLoader final : public ModelLoader {
+class FooProvider final : public Provider {
 public:
     virtual const Info& info() const noexcept override {
         static Info i = {
@@ -141,15 +141,19 @@ public:
             return std::make_shared<FooModel>(fname, params);
         }
     }
+
+    virtual frameio::SessionHandlerPtr createSessionHandler(std::string_view) override {
+        return {};
+    }
 };
 
 } // namespace ac::local
 
 namespace ac::foo {
 
-std::vector<ac::local::ModelLoaderPtr> getLoaders() {
-    std::vector<ac::local::ModelLoaderPtr> ret;
-    ret.push_back(std::make_unique<local::FooModelLoader>());
+std::vector<ac::local::ProviderPtr> getProviders() {
+    std::vector<ac::local::ProviderPtr> ret;
+    ret.push_back(std::make_unique<local::FooProvider>());
     return ret;
 }
 
@@ -162,7 +166,7 @@ local::PluginInterface getPluginInterface() {
             ACLP_foo_VERSION_MAJOR, ACLP_foo_VERSION_MINOR, ACLP_foo_VERSION_PATCH
         },
         .init = nullptr,
-        .getLoaders = getLoaders,
+        .getProviders = getProviders,
     };
 }
 
