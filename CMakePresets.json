@@ -61,14 +61,14 @@
       "name": "debug-mono-comp",
       "inherits": ["base-debug", "mono", "component"],
       "cacheVariables": {
-        "ac-local_ROOT": "${sourceDir}/../ac-local/out/build/debug"
+        "alpaca-core-sdk_ROOT": "${sourceDir}/../alpaca-core-sdk/out/build/debug"
       }
     },
     {
       "name": "release-mono-comp",
       "inherits": ["base-release", "mono", "component"],
       "cacheVariables": {
-        "ac-local_ROOT": "${sourceDir}/../ac-local/out/build/release"
+        "alpaca-core-sdk_ROOT": "${sourceDir}/../alpaca-core-sdk/out/build/release"
       }
     },
 

@@ -7,7 +7,7 @@
 #include <string>
 #include <tuple>
 
-namespace ac::local::schema {
+namespace ac::schema {
 
 struct FooInterface {
     static inline constexpr std::string_view id = "foo/v1";
@@ -74,4 +74,4 @@ struct FooProvider {
     using Instances = std::tuple<InstanceGeneral>;
 };
 
-} // namespace ac::local::schema
+} // namespace ac::schema

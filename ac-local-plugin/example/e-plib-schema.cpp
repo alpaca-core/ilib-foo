@@ -6,7 +6,7 @@
 #include <ac/local/ModelAssetDesc.hpp>
 #include <ac/local/Lib.hpp>
 
-#include <ac/schema/CallHelpers.hpp>
+#include <ac/local/schema/CallHelpers.hpp>
 #include <ac/schema/Foo.hpp>
 
 #include <ac/jalog/Instance.hpp>
@@ -31,10 +31,10 @@ int main() try {
         .name = "foo-large"
     }, {});
 
-    using Instance = ac::local::schema::FooProvider::InstanceGeneral;
+    using Instance = ac::schema::FooProvider::InstanceGeneral;
     auto instance = Model_createInstance<Instance>(*model, {});
 
-    using Interface = ac::local::schema::FooInterface;
+    using Interface = ac::schema::FooInterface;
     auto opResult = Instance_runOp<Interface::OpRun>(*instance, {
         .input = std::vector<std::string>{"JFK", "said:"},
         .splice = false

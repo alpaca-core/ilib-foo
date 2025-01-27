@@ -37,7 +37,7 @@ init_ac_plugin_option(FOO)
 #######################################
 # packages
 
-add_ac_local(0.1.5)
+add_ac_local(0.1.6)
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.4)
 
