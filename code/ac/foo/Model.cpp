@@ -9,38 +9,40 @@
 
 namespace ac::foo {
 
-Model::Model(const char* path, Params params)
-    : m_params(itlib::force_move(params))
-{
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        FOO_LOG(Error, "Failed to open file: ", path);
-        Throw{} << "Failed to open file: " << path;
-    }
-
-    FOO_LOG(Info, "Loading model from ", path);
-
-    while (!file.eof()) {
-        std::string word;
-        file >> word;
-        if (word.empty()) {
-            // ignore empty strings
-            continue;
-        }
-        addDataItem(itlib::force_move(word));
-    }
-}
-
 static constexpr std::string_view SyntheticModel_Data[] = {
     "one", "two", "three", "four", "five", "once", "I", "caught", "a", "fish", "alive",
     "six", "seven", "eight", "nine", "ten", "then", "I", "let", "it", "go", "again"
 };
 
+
 Model::Model(Params params)
     : m_params(itlib::force_move(params))
 {
-    for (auto& item : SyntheticModel_Data) {
-        addDataItem(std::string(item));
+    auto& path = m_params.path;
+
+    if (path.empty()) {
+        for (auto& item : SyntheticModel_Data) {
+            addDataItem(std::string(item));
+        }
+    }
+    else {
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            FOO_LOG(Error, "Failed to open file: ", path);
+            Throw{} << "Failed to open file: " << path;
+        }
+
+        FOO_LOG(Info, "Loading model from ", path);
+
+        while (!file.eof()) {
+            std::string word;
+            file >> word;
+            if (word.empty()) {
+                // ignore empty strings
+                continue;
+            }
+            addDataItem(itlib::force_move(word));
+        }
     }
 }
 

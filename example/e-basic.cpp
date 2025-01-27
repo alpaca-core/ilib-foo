@@ -17,7 +17,7 @@ int main() try {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
-    ac::foo::Model model(AC_FOO_MODEL_SMALL, {});
+    ac::foo::Model model({.path = AC_FOO_MODEL_SMALL});
     ac::foo::Instance instance(model, {});
 
     auto s = instance.newSession({"soco", "bate", "soco", "vira"}, {.splice = false});

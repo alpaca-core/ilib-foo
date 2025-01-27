@@ -13,10 +13,10 @@ namespace ac::foo {
 class AC_FOO_API Model {
 public:
     struct Params {
+        std::string path;   // path to file with data (or empty string for synthetic model)
         std::string splice; // splice string before each data element
     };
 
-    Model(const char* path, Params params);
     explicit Model(Params params); // synthetic model
     ~Model();
 

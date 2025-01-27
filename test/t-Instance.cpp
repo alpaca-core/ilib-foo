@@ -7,7 +7,7 @@
 #include <doctest/doctest.h>
 
 TEST_CASE("splice") {
-    ac::foo::Model small(AC_FOO_MODEL_SMALL, {});
+    ac::foo::Model small({.path = AC_FOO_MODEL_SMALL});
     ac::foo::Instance inst(small, {.cutoff = 2});
     {
         auto s = inst.newSession({"a", "b", "c"}, {});
@@ -22,7 +22,7 @@ TEST_CASE("splice") {
 }
 
 TEST_CASE("no-splice") {
-    ac::foo::Model small(AC_FOO_MODEL_SMALL, {});
+    ac::foo::Model small({.path = AC_FOO_MODEL_SMALL});
     ac::foo::Instance inst(small, {});
     {
         auto s = inst.newSession({"a", "b"}, {.splice = false});
@@ -36,7 +36,7 @@ TEST_CASE("no-splice") {
 }
 
 TEST_CASE("model splice") {
-    ac::foo::Model small(AC_FOO_MODEL_SMALL, {.splice = "x"});
+    ac::foo::Model small({.path = AC_FOO_MODEL_SMALL, .splice = "x"});
     ac::foo::Instance inst(small, {});
     {
         auto s = inst.newSession({ "a", "b", "c" }, {});
@@ -51,7 +51,7 @@ TEST_CASE("model splice") {
 }
 
 TEST_CASE("exceptions") {
-    ac::foo::Model small(AC_FOO_MODEL_SMALL, {});
+    ac::foo::Model small({.path = AC_FOO_MODEL_SMALL});
 
     CHECK_THROWS_WITH_AS(ac::foo::Instance(small, {.cutoff = 1000}), "Cutoff 1000 greater than model size 3", std::runtime_error);
 
