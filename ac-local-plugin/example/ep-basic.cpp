@@ -25,11 +25,16 @@ int main() {
     auto fooHandler = ac::local::Lib::createSessionHandler("foo");
     auto foo = io.connectBlocking(std::move(fooHandler));
 
+    foo.poll(); // state info from plugin (dummy)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});
+    foo.poll(); // load_model response
+    foo.poll(); // state info from plugin (model loaded)
     foo.push({"create_instance", {}});
+    foo.poll(); // creat_instance response
+    foo.poll(); // state info from plugin (instance created)
     foo.push({"run", {{"input", {"JFK", "said:"}}, {"splice", false}}});
 
-    auto result = foo.poll();
+    auto result = foo.poll(); // run response
     std::cout << result.frame.data << "\n";
 
     foo.close();
