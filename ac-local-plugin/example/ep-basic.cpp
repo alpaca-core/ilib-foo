@@ -25,7 +25,7 @@ int main() {
     auto fooHandler = ac::local::Lib::createSessionHandler("foo");
     auto foo = io.connectBlocking(std::move(fooHandler));
 
-    foo.push({"load", {{"file_path", AC_FOO_MODEL_LARGE}}});
+    foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});
     foo.push({"create_instance", {}});
     foo.push({"run", {{"input", {"JFK", "said:"}}, {"splice", false}}});
 

@@ -95,7 +95,7 @@ SessionCoro<void> Foo_runModel(coro::Io io, std::unique_ptr<foo::Model> model) {
     auto f = co_await io.pollFrame();
 
     if (f.frame.op != "create_instance") {
-        throw_ex{} << "foo: expected 'create' op, got: " << f.frame.op;
+        throw_ex{} << "foo: expected 'create_instance' op, got: " << f.frame.op;
     }
     auto params = InitParams_fromDict(astl::move(f.frame.data));
     co_await Foo_runInstance(io, std::make_unique<foo::Instance>(*model, astl::move(params)));
@@ -108,8 +108,8 @@ SessionCoro<void> Foo_runSession() {
 
     try {
         auto f = co_await io.pollFrame();
-        if (f.frame.op != "load") {
-            throw_ex{} << "foo: expected 'load' op, got: " << f.frame.op;
+        if (f.frame.op != "load_model") {
+            throw_ex{} << "foo: expected 'load_model' op, got: " << f.frame.op;
         }
 
         // btodo: abort
