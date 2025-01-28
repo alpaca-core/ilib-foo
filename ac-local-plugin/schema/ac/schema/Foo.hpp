@@ -9,13 +9,97 @@
 
 namespace ac::schema {
 
-struct FooInterface {
-    static inline constexpr std::string_view id = "foo/v1";
-    static inline constexpr std::string_view description = "Foo interface";
+inline namespace foo {
+
+struct StateInitial {
+    static constexpr auto id = "foo";
+    static constexpr auto desc = "Initial foo state";
+
+    struct OpLoadModel {
+        static constexpr auto id = "load_model";
+        static constexpr auto desc = "Load the foo model";
+
+        struct Params{
+            Field<std::string> filePath = std::nullopt;
+            Field<std::string> spliceString = std::nullopt;
+
+            template <typename Visitor>
+            void visitFields(Visitor& v) {
+                v(filePath, "file_path", "Optional path to the file with model data. Empty for synthetic data");
+                v(spliceString, "splice_string", "String to splice between model data elements");
+            }
+        };
+
+        using Return = nullptr_t;
+    };
+
+    using Ops = std::tuple<OpLoadModel>;
+    using Ins = std::tuple<>;
+    using Outs = std::tuple<>;
+};
+
+struct StateLoadingModel {
+    static constexpr auto id = "loading_model";
+    static constexpr auto desc = "Loading the foo model. After completion the state will transition to Model Loaded";
+
+    struct OpAbort {
+        static constexpr auto id = "abort";
+        static constexpr auto desc = "Abort the model loading";
+        using Params = nullptr_t;
+        using Return = nullptr_t;
+    };
+
+    struct StreamProgress {
+        static constexpr auto id = "progress";
+        static constexpr auto desc = "Progress stream";
+
+        struct Type {
+            Field<int> progress;
+
+            template <typename Visitor>
+            void visitFields(Visitor& v) {
+                v(progress, "progress", "Progress from 0 to 1");
+            };
+        };
+    };
+
+    using Ops = std::tuple<OpAbort>;
+    using Ins = std::tuple<>;
+    using Outs = std::tuple<StreamProgress>;
+};
+
+struct StateModelLoaded {
+    static constexpr auto id = "model_loaded";
+    static constexpr auto desc = "Model loaded";
+
+    struct OpCreateInstance {
+        static constexpr auto id = "create_instance";
+        static constexpr auto desc = "Create an instance of the foo model";
+
+        struct Params {
+            Field<int> cutoff = Default(-1);
+
+            template <typename Visitor>
+            void visitFields(Visitor& v) {
+                v(cutoff, "cutoff", "Cut off model data to n-th element (or don't cut if -1)");
+            }
+        };
+
+        using Return = nullptr_t;
+    };
+
+    using Ops = std::tuple<OpCreateInstance>;
+    using Ins = std::tuple<>;
+    using Outs = std::tuple<>;
+};
+
+struct StateInstance {
+    static constexpr auto id = "instance";
+    static constexpr auto desc = "Foo instance";
 
     struct OpRun {
-        static inline constexpr std::string_view id = "run";
-        static inline constexpr std::string_view description = "Run the foo inference and produce some output";
+        static constexpr auto id = "run";
+        static constexpr auto desc = "Run the foo inference and produce some output";
 
         struct Params {
             Field<std::vector<std::string>> input;
@@ -40,40 +124,17 @@ struct FooInterface {
     };
 
     using Ops = std::tuple<OpRun>;
+    using Ins = std::tuple<>;
+    using Outs = std::tuple<>;
 };
 
-struct FooProvider {
+struct Interface {
     static inline constexpr std::string_view id = "foo";
-    static inline constexpr std::string_view description = "Foo inference for tests, examples, and experiments.";
+    static inline constexpr std::string_view desc = "Foo inference for tests, examples, and experiments.";
 
-    struct Params {
-        Field<std::string> filePath = std::nullopt;
-        Field<std::string> spliceString = std::nullopt;
-
-        template <typename Visitor>
-        void visitFields(Visitor& v) {
-            v(filePath, "file_path", "Optional path to the file with model data. Empty for synthetic data");
-            v(spliceString, "splice_string", "String to splice between model data elements");
-        }
-    };
-
-    struct InstanceGeneral {
-        static inline constexpr std::string_view id = "general";
-        static inline constexpr std::string_view description = "General instance";
-
-        struct Params {
-            Field<int> cutoff = Default(-1);
-
-            template <typename Visitor>
-            void visitFields(Visitor& v) {
-                v(cutoff, "cutoff", "Cut off model data to n-th element (or don't cut if -1)");
-            }
-        };
-
-        using Interfaces = std::tuple<FooInterface>;
-    };
-
-    using Instances = std::tuple<InstanceGeneral>;
+    using States = std::tuple<StateInitial, StateLoadingModel, StateModelLoaded, StateInstance>;
 };
+
+} // namespace foo
 
 } // namespace ac::schema

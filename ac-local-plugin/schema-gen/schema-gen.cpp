@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: MIT
 //
 #include <ac/schema/Foo.hpp>
-#include <ac/local/schema/GenerateProviderSchemaDict.hpp>
+#include <ac/schema/GenerateSchemaDict.hpp>
 #include <iostream>
 
 int main() {
-    auto d = ac::schema::generateProviderSchema<acnl::ordered_json, ac::schema::FooProvider>();
+    auto d = Interface_generateSchemaDict<acnl::ordered_json>(ac::schema::foo::Interface{});
     std::cout << d.dump(2) << std::endl;
     return 0;
 }
