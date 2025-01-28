@@ -94,7 +94,7 @@ SessionCoro<void> Foo_runInstance(coro::Io io, std::unique_ptr<foo::Instance> in
 SessionCoro<void> Foo_runModel(coro::Io io, std::unique_ptr<foo::Model> model) {
     auto f = co_await io.pollFrame();
 
-    if (f.frame.op != "create") {
+    if (f.frame.op != "create_instance") {
         throw_ex{} << "foo: expected 'create' op, got: " << f.frame.op;
     }
     auto params = InitParams_fromDict(astl::move(f.frame.data));

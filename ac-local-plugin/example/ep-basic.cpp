@@ -26,7 +26,7 @@ int main() {
     auto foo = io.connectBlocking(std::move(fooHandler));
 
     foo.push({"load", {{"file_path", AC_FOO_MODEL_LARGE}}});
-    foo.push({"create", {}});
+    foo.push({"create_instance", {}});
     foo.push({"run", {{"input", {"JFK", "said:"}}, {"splice", false}}});
 
     auto result = foo.poll();
