@@ -7,5 +7,4 @@ target_sources(ac-foo-schema-gen PRIVATE
 )
 target_link_libraries(ac-foo-schema-gen PRIVATE
     ac::foo-schema
-    ac::local
 )

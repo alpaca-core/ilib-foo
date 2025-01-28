@@ -1,0 +1,138 @@
+{
+  "id": "foo",
+  "description": "Foo inference for tests, examples, and experiments.",
+  "states": [
+    {
+      "id": "foo",
+      "description": "Initial foo state",
+      "ops": {
+        "load_model": {
+          "description": "Load the foo model",
+          "params": {
+            "type": "object",
+            "properties": {
+              "file_path": {
+                "type": "string",
+                "description": "Optional path to the file with model data. Empty for synthetic data"
+              },
+              "splice_string": {
+                "type": "string",
+                "description": "String to splice between model data elements"
+              }
+            }
+          },
+          "return": {
+            "type": "null"
+          }
+        }
+      },
+      "ins": null,
+      "outs": null
+    },
+    {
+      "id": "loading_model",
+      "description": "Loading the foo model. After completion the state will transition to Model Loaded",
+      "ops": {
+        "abort": {
+          "description": "Abort the model loading",
+          "params": {
+            "type": "null"
+          },
+          "return": {
+            "type": "null"
+          }
+        }
+      },
+      "ins": null,
+      "outs": {
+        "progress": {
+          "items": {
+            "type": "object",
+            "properties": {
+              "progress": {
+                "type": "integer",
+                "description": "Progress from 0 to 1"
+              }
+            },
+            "required": [
+              "progress"
+            ]
+          },
+          "description": "Progress stream"
+        }
+      }
+    },
+    {
+      "id": "model_loaded",
+      "description": "Model loaded",
+      "ops": {
+        "create_instance": {
+          "description": "Create an instance of the foo model",
+          "params": {
+            "type": "object",
+            "properties": {
+              "cutoff": {
+                "type": "integer",
+                "description": "Cut off model data to n-th element (or don't cut if -1)",
+                "default": -1
+              }
+            }
+          },
+          "return": {
+            "type": "null"
+          }
+        }
+      },
+      "ins": null,
+      "outs": null
+    },
+    {
+      "id": "instance",
+      "description": "Foo instance",
+      "ops": {
+        "run": {
+          "description": "Run the foo inference and produce some output",
+          "params": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Input items"
+              },
+              "splice": {
+                "type": "integer",
+                "description": "Splice input with model data (otherwise append model data to input)",
+                "default": true
+              },
+              "throw_on": {
+                "type": "integer",
+                "description": "Throw exception on n-th token (or don't throw if -1)",
+                "default": -1
+              }
+            },
+            "required": [
+              "input"
+            ]
+          },
+          "return": {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "string",
+                "description": "Output text (tokens joined with space)"
+              }
+            },
+            "required": [
+              "result"
+            ]
+          }
+        }
+      },
+      "ins": null,
+      "outs": null
+    }
+  ]
+}
