@@ -86,7 +86,7 @@ SessionCoro<void> Foo_runInstance(coro::Io io, std::unique_ptr<foo::Instance> in
 
     while (true) {
         auto f = co_await io.pollFrame();
-        co_await io.pushFrame(runner.dispatch(f.frame));
+        co_await io.pushFrame(runner.dispatch(f.value));
     }
 }
 
@@ -120,7 +120,7 @@ SessionCoro<void> Foo_runModel(coro::Io io, std::unique_ptr<foo::Model> model) {
 
     while (true) {
         auto f = co_await io.pollFrame();
-        co_await io.pushFrame(runner.dispatch(f.frame));
+        co_await io.pushFrame(runner.dispatch(f.value));
         if (runner.instance) {
             co_await Foo_runInstance(io, astl::move(runner.instance));
         }
@@ -159,7 +159,7 @@ SessionCoro<void> Foo_runSession() {
 
         while (true) {
             auto f = co_await io.pollFrame();
-            co_await io.pushFrame(runner.dispatch(f.frame));
+            co_await io.pushFrame(runner.dispatch(f.value));
             if (runner.model) {
                 co_await Foo_runModel(io, astl::move(runner.model));
             }

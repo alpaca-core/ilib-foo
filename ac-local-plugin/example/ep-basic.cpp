@@ -23,7 +23,7 @@ int main() {
     ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
     auto fooHandler = ac::local::Lib::createSessionHandler("foo");
-    auto foo = io.connectBlocking(std::move(fooHandler));
+    ac::frameio::BlockingIo foo{io.connect(std::move(fooHandler))};
 
     foo.poll(); // state info from plugin (dummy)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});
@@ -35,7 +35,7 @@ int main() {
     foo.push({"run", {{"input", {"JFK", "said:"}}, {"splice", false}}});
 
     auto result = foo.poll(); // run response
-    std::cout << result.frame.data << "\n";
+    std::cout << result.value.data << "\n";
 
     foo.close();
 

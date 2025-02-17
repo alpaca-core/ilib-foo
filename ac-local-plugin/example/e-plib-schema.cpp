@@ -27,7 +27,7 @@ int main() try {
     ac::frameio::LocalIoRunner io;
 
     auto fooHandler = ac::local::Lib::createSessionHandler("foo");
-    ac::schema::BlockingIoHelper foo(io.connectBlocking(std::move(fooHandler)));
+    ac::schema::BlockingIoHelper foo(io.connect(std::move(fooHandler)));
 
     namespace schema = ac::schema::foo;
 
