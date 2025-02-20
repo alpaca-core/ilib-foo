@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include <ac/local/Lib.hpp>
-#include <ac/frameio/local/LocalIoRunner.hpp>
+#include <ac/local/IoCtx.hpp>
 #include <ac/schema/BlockingIoHelper.hpp>
 #include <ac/schema/FrameHelpers.hpp>
 
@@ -24,10 +24,10 @@ int main() try {
 
     add_foo_to_ac_local_global_registry();
 
-    ac::frameio::LocalIoRunner io;
+    ac::local::IoCtx io;
 
-    auto fooHandler = ac::local::Lib::createSessionHandler("foo");
-    ac::schema::BlockingIoHelper foo(io.connect(std::move(fooHandler)));
+    auto& fooProvider = ac::local::Lib::getProvider("foo");
+    ac::schema::BlockingIoHelper foo(io.connect(fooProvider));
 
     namespace schema = ac::schema::foo;
 

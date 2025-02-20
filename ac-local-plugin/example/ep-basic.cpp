@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include <ac/local/Lib.hpp>
-#include <ac/frameio/local/LocalIoRunner.hpp>
+#include <ac/local/IoCtx.hpp>
 #include <ac/frameio/local/BlockingIo.hpp>
 #include <ac/Frame.hpp>
 
@@ -18,14 +18,14 @@ int main() {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
-    ac::frameio::LocalIoRunner io;
+    ac::local::IoCtx io;
 
     ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
-    auto fooHandler = ac::local::Lib::createSessionHandler("foo");
-    ac::frameio::BlockingIo foo{io.connect(std::move(fooHandler))};
+    auto& fooProvider = ac::local::Lib::getProvider("foo");
+    ac::frameio::BlockingIo foo{io.connect(fooProvider)};
 
-    foo.poll(); // state info from plugin (dummy)
+    foo.poll(); // state info from plugin (foo)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});
     foo.poll(); // load_model response
     foo.poll(); // state info from plugin (model loaded)
