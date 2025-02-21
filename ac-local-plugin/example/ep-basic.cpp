@@ -18,12 +18,13 @@ int main() {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
+    ac::frameio::BlockingIoCtx blockingCtx;
     ac::local::IoCtx io;
 
     ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
     auto& fooProvider = ac::local::Lib::getProvider("foo");
-    ac::frameio::BlockingIo foo{io.connect(fooProvider)};
+    ac::frameio::BlockingIo foo(io.connect(fooProvider), blockingCtx);
 
     foo.poll(); // state info from plugin (foo)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});

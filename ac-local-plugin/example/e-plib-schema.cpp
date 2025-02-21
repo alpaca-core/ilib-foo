@@ -24,10 +24,11 @@ int main() try {
 
     add_foo_to_ac_local_global_registry();
 
+    ac::frameio::BlockingIoCtx blockingCtx;
     ac::local::IoCtx io;
 
     auto& fooProvider = ac::local::Lib::getProvider("foo");
-    ac::schema::BlockingIoHelper foo(io.connect(fooProvider));
+    ac::schema::BlockingIoHelper foo(io.connect(fooProvider), blockingCtx);
 
     namespace schema = ac::schema::foo;
 
