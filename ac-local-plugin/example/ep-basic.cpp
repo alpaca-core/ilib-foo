@@ -3,7 +3,7 @@
 //
 #include <ac/local/Lib.hpp>
 #include <ac/local/IoCtx.hpp>
-#include <ac/frameio/local/BlockingIo.hpp>
+#include <ac/frameio/BlockingIo.hpp>
 #include <ac/Frame.hpp>
 
 #include <ac/jalog/Instance.hpp>
