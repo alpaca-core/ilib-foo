@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include <ac/local/Lib.hpp>
-#include <ac/local/IoCtx.hpp>
+#include <ac/local/DefaultBackend.hpp>
 #include <ac/frameio/BlockingIo.hpp>
 #include <ac/Frame.hpp>
 
@@ -18,13 +18,11 @@ int main() {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
-    ac::frameio::BlockingIoCtx blockingCtx;
-    ac::local::IoCtx io;
-
     ac::local::Lib::loadPlugin(ACLP_foo_PLUGIN_FILE);
 
-    auto& fooProvider = ac::local::Lib::getProvider("foo");
-    ac::frameio::BlockingIo foo(io.connect(fooProvider), blockingCtx);
+    ac::local::DefaultBackend backend;
+
+    ac::frameio::BlockingIo foo(backend.connect("foo"));
 
     foo.poll(); // state info from plugin (foo)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});

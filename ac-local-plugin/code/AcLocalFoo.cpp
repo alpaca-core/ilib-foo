@@ -9,8 +9,10 @@
 
 #include <ac/schema/Foo.hpp>
 
-#include <ac/local/Provider.hpp>
-#include <ac/local/ProviderSessionContext.hpp>
+#include <ac/local/Service.hpp>
+#include <ac/local/ServiceFactory.hpp>
+#include <ac/local/ServiceInfo.hpp>
+#include <ac/local/Backend.hpp>
 
 #include <ac/schema/OpDispatchHelpers.hpp>
 
@@ -175,18 +177,31 @@ xec::coro<void> Foo_runSession(StreamEndpoint ep) {
     }
 }
 
-class FooProvider final : public Provider {
-public:
-    virtual const Info& info() const noexcept override {
-        static Info i = {
-            .name = "ac-local foo",
-            .vendor = "Alpaca Core",
-        };
-        return i;
+ServiceInfo g_serviceInfo = {
+    .name = "ac-local foo",
+    .vendor = "Alpaca Core",
+};
+
+struct FooService final : public Service {
+    xec::strand cpuStrand;
+
+    virtual const ServiceInfo& info() const noexcept override {
+        return g_serviceInfo;
     }
 
-    virtual void createSession(ProviderSessionContext ctx) override {
-        co_spawn(ctx.executor.cpu, Foo_runSession(std::move(ctx.endpoint.session)));
+    virtual void createSession(frameio::StreamEndpoint ep, std::string_view) override {
+        co_spawn(cpuStrand, Foo_runSession(std::move(ep)));
+    }
+};
+
+struct FooServiceFactory final : public ServiceFactory {
+    virtual const ServiceInfo& info() const noexcept override {
+        return g_serviceInfo;
+    }
+    virtual std::unique_ptr<Service> createService(const Backend& backend) const override {
+        auto svc = std::make_unique<FooService>();
+        svc->cpuStrand = backend.xctx().cpu;
+        return svc;
     }
 };
 
@@ -196,10 +211,9 @@ public:
 
 namespace ac::foo {
 
-std::vector<ac::local::ProviderPtr> getProviders() {
-    std::vector<ac::local::ProviderPtr> ret;
-    ret.push_back(std::make_unique<local::FooProvider>());
-    return ret;
+std::vector<const local::ServiceFactory*> getFactories() {
+    static local::FooServiceFactory factory;
+    return {&factory};
 }
 
 local::PluginInterface getPluginInterface() {
@@ -211,7 +225,7 @@ local::PluginInterface getPluginInterface() {
             ACLP_foo_VERSION_MAJOR, ACLP_foo_VERSION_MINOR, ACLP_foo_VERSION_PATCH
         },
         .init = nullptr,
-        .getProviders = getProviders,
+        .getServiceFactories = getFactories,
     };
 }
 

@@ -2,11 +2,9 @@
 // SPDX-License-Identifier: MIT
 //
 #include <ac/local/Lib.hpp>
-#include <ac/local/IoCtx.hpp>
+#include <ac/local/DefaultBackend.hpp>
 #include <ac/schema/BlockingIoHelper.hpp>
 #include <ac/schema/FrameHelpers.hpp>
-
-#include <ac/local/PluginPlibUtil.inl>
 
 #include <ac/schema/Foo.hpp>
 
@@ -22,13 +20,11 @@ int main() try {
     ac::jalog::Instance jl;
     jl.setup().add<ac::jalog::sinks::DefaultSink>();
 
-    add_foo_to_ac_local_global_registry();
+    add_foo_to_ac_local_plugin_manager();
 
-    ac::frameio::BlockingIoCtx blockingCtx;
-    ac::local::IoCtx io;
+    ac::local::DefaultBackend backend;
 
-    auto& fooProvider = ac::local::Lib::getProvider("foo");
-    ac::schema::BlockingIoHelper foo(io.connect(fooProvider), blockingCtx);
+    ac::schema::BlockingIoHelper foo(backend.connect("foo"));
 
     namespace schema = ac::schema::foo;
 
