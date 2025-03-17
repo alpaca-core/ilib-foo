@@ -84,6 +84,18 @@ xec::coro<void> Foo_runInstance(IoEndpoint& io, std::unique_ptr<foo::Instance> i
 
             return ret;
         }
+        Schema::OpGenBlob::Return on(Schema::OpGenBlob, Schema::OpGenBlob::Params params) {
+            Schema::OpGenBlob::Return ret;
+            auto& blob = ret.blob.materialize();
+            for (auto& w : m_instance.model().data()) {
+                std::string_view token = w;
+                while (blob.size() < params.maxSize.value() && !token.empty()) {
+                    blob.push_back(uint8_t(token.front()));
+                    token.remove_prefix(1);
+                }
+            }
+            return ret;
+        }
     };
 
     co_await io.push(Frame_stateChange(Schema::id));

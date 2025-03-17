@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
 project(ilib-foo
-    VERSION 0.1.3
+    VERSION 0.1.4
     DESCRIPTION "Example plugin for the Alpaca Core Local SDK"
     LANGUAGES CXX
 )

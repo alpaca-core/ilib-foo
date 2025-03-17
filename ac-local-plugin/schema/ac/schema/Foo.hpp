@@ -3,6 +3,7 @@
 //
 #pragma once
 #include <ac/schema/Field.hpp>
+#include <ac/Dict.hpp>
 #include <vector>
 #include <string>
 #include <tuple>
@@ -123,7 +124,26 @@ struct StateInstance {
         };
     };
 
-    using Ops = std::tuple<OpRun>;
+    struct OpGenBlob {
+        static constexpr auto id = "gen_blob";
+        static constexpr auto desc = "Output model data as blob";
+        struct Params {
+            Field<int> maxSize = Default(1024);
+            template <typename Visitor>
+            void visitFields(Visitor& v) {
+                v(maxSize, "max_size", "Max size of the blob");
+            }
+        };
+        struct Return {
+            Field<Blob> blob;
+            template <typename Visitor>
+            void visitFields(Visitor& v) {
+                v(blob, "blob", "Generated blob");
+            }
+        };
+    };
+
+    using Ops = std::tuple<OpRun, OpGenBlob>;
     using Ins = std::tuple<>;
     using Outs = std::tuple<>;
 };
