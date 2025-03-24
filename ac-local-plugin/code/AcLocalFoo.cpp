@@ -201,7 +201,7 @@ struct FooService final : public Service {
         return g_serviceInfo;
     }
 
-    virtual void createSession(frameio::StreamEndpoint ep, std::string_view) override {
+    virtual void createSession(frameio::StreamEndpoint ep, Dict) override {
         co_spawn(cpuStrand, Foo_runSession(std::move(ep)));
     }
 };
@@ -210,7 +210,7 @@ struct FooServiceFactory final : public ServiceFactory {
     virtual const ServiceInfo& info() const noexcept override {
         return g_serviceInfo;
     }
-    virtual std::unique_ptr<Service> createService(const Backend& backend) const override {
+    virtual std::unique_ptr<Service> createService(Backend& backend) const override {
         auto svc = std::make_unique<FooService>();
         svc->cpuStrand = backend.xctx().cpu;
         return svc;

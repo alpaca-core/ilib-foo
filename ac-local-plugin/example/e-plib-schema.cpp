@@ -24,7 +24,7 @@ int main() try {
 
     ac::local::DefaultBackend backend;
 
-    ac::schema::BlockingIoHelper foo(backend.connect("foo"));
+    ac::schema::BlockingIoHelper foo(backend.connect("foo", {}));
 
     namespace schema = ac::schema::foo;
 

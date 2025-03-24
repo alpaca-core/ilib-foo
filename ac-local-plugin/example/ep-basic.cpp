@@ -22,7 +22,7 @@ int main() {
 
     ac::local::DefaultBackend backend;
 
-    ac::frameio::BlockingIo foo(backend.connect("foo"));
+    ac::frameio::BlockingIo foo(backend.connect("foo", {}));
 
     foo.poll(); // state info from plugin (foo)
     foo.push({"load_model", {{"file_path", AC_FOO_MODEL_LARGE}}});
