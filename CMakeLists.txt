@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
 project(ilib-foo
-    VERSION 0.1.4
+    VERSION 0.1.5
     DESCRIPTION "Example plugin for the Alpaca Core Local SDK"
     LANGUAGES CXX
 )
@@ -37,7 +37,7 @@ init_ac_plugin_option(FOO)
 #######################################
 # packages
 
-add_ac_local(0.1.19)
+add_ac_local(0.1.20)
 CPMAddPackage(gh:iboB/splat@1.3.3)
 CPMAddPackage(gh:iboB/itlib@1.11.5)
 
